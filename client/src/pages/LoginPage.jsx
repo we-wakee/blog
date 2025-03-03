@@ -13,7 +13,7 @@ export default function LoginPage() {
   async function login(ev) {
     ev.preventDefault(); // Prevent default form submission
 
-    const response = await fetch('http://localhost:4000/login', {
+    const response = await fetch('http://localhost:5000/login', {
       method: 'POST', // Fixed missing quotes
       body: JSON.stringify({ username, password }),
       headers: { 'Content-Type': 'application/json' },

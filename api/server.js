@@ -16,7 +16,7 @@ const secret = '1234';
 
 mongoose.connect('mongodb+srv://mikasa:1234@blog.xhfki.mongodb.net/')
 
-app.listen(4000,()=>{
+app.listen(5000,()=>{
     console.log("server started")
 });
 

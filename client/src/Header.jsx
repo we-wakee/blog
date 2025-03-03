@@ -5,17 +5,17 @@ import { UserContext } from "./UserContext";
 export default function Header() {
   const { setUserInfo, userInfo } = useContext(UserContext);
 
-  useEffect(() => {
-    fetch("http://localhost:4000/profile", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((userInfo) => setUserInfo(userInfo))
-      .catch((error) => console.error("Error fetching user profile:", error));
-  }, []);
+  // useEffect(() => {
+  //   fetch("http://localhost:4000/profile", {
+  //     credentials: "include",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((userInfo) => setUserInfo(userInfo))
+  //     .catch((error) => console.error("Error fetching user profile:", error));
+  // }, []);
 
   function logout() {
-    fetch("http://localhost:4000/logout", {
+    fetch("http://localhost:5000/logout", {
       credentials: "include",
       method: "POST",
     });
