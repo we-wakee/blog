@@ -5,8 +5,7 @@ const Buffer = require('safe-buffer').Buffer;
 const bcrypt= require('bcrypt')
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
-
-
+const userModel = require('./models/User.jsx')
 const app = express()
 app.use(express.json()); 
 app.use(cors()); 
@@ -23,7 +22,7 @@ app.listen(5000,()=>{
 app.post('/register',async(req,res)=>{
     const {username,password} = req.body;
     try{
-        const userDoc = await create({
+        const userDoc = await userModel.create({
             username,
             password:bcrypt.hashSync(password,salt)
         })
