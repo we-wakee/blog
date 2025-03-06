@@ -1,5 +1,4 @@
-import React from 'react';
-import { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from '../UserContext';
 import { Link, Navigate } from 'react-router-dom';
 
@@ -11,58 +10,57 @@ export default function LoginPage() {
   const { setUserInfo } = useContext(UserContext);
 
   async function login(ev) {
-    ev.preventDefault(); // Prevent default form submission
+    ev.preventDefault();
 
     const response = await fetch('http://localhost:5000/login', {
-      method: 'POST', // Fixed missing quotes
+      method: 'POST',
       body: JSON.stringify({ username, password }),
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     });
 
     if (response.ok) {
-      response.json().then((userInfo) => {
-        setUserInfo(userInfo);
-        setRedirect(true);
-      });
+      const userInfo = await response.json();
+      setUserInfo(userInfo);
+      setRedirect(true);
     } else {
       alert('Wrong credentials');
     }
+  }
 
-    if (redirect) {
-      return <Navigate to={'./'} />;
-    }
+  if (redirect) {
+    return <Navigate to='/' />;
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md">
+    <div className="flex items-center justify-center min-h-screen bg-[#1E2425]">
+      <div className="bg-[#212B2D] p-6 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold text-center text-white mb-4">Login</h1>
-        <form onSubmit={login} className="space-y-4">
+        <form onSubmit={login} className="space-y-4 bg-[#343BC] p-6 rounded-lg shadow-md">
           <input
             type="text"
             placeholder="Username"
             value={username}
             onChange={(ev) => setUsername(ev.target.value)}
-            className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full px-4 py-2 border border-[#511D47] bg-[#444C4D] text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF4F61]"
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(ev) => setPassword(ev.target.value)}
-            className="w-full px-4 py-2 border border-gray-600 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full px-4 py-2 border border-[#511D47] bg-[#444C4D] text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF4F61]"
           />
           <button
             type="submit"
-            className="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold py-2 rounded-md transition duration-200"
+            className="w-full bg-[#FF4F61] hover:bg-[#FF4F61] text-white font-semibold py-2 rounded-md transition duration-200"
           >
             Login
           </button>
         </form>
-        <p className="text-center text-gray-400 mt-4">
+        <p className="text-center text-[#ff4d5e96] mt-4">
           Don't have an account?{' '}
-          <Link to="/register" className="text-orange-400 hover:underline">
+          <Link to="/register" className="text-[#FF4F61] hover:underline">
             Register here
           </Link>
         </p>
