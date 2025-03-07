@@ -28,7 +28,7 @@ export default function Header() {
   return (
     <header className="px-6 py-4 bg-[#212B2D] shadow-md flex justify-between items-center">
       <Link to="/" className="text-2xl font-bold text-white hover:text-[#FF4F61] transition duration-200">
-        MyBlog
+        Vivek Blog
       </Link>
 
       <nav className="flex gap-6 text-gray-300">

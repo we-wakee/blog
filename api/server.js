@@ -22,6 +22,7 @@ app.use(cors({
     allowedHeaders: "Content-Type,Authorization", // Allowed headers
 }));
 app.use(express.json());
+app.use('/uploads', express.static(__dirname + '/uploads'));
 const salt = bcrypt.genSaltSync(10);
 const secret = '1234';
 
@@ -91,29 +92,63 @@ app.get('/profile',(req,res)=>{
     });
 })
 
-app.get('/post',uploadMiddleware.single('file'), (req,res)=>{
-    const {originalname,path} = req.file;
+
+app.post('/post', uploadMiddleware.single('file'), async (req, res) => {
+    const { originalname, path } = req.file;
     const parts = originalname.split('.');
     const ext = parts[parts.length - 1];
-    const newPath = path+'.'+ext;
+    const newPath = path + '.' + ext;
+    
+    // Rename the file to include its extension
     fs.renameSync(path, newPath);
 
-    const {token} = req.cookies;
-    jwt.verify(token,secret,{},async (err,info)=>{
-        if(err) throw err;
+    const { token } = req.cookies;
+    
+    // Verify JWT token
+    jwt.verify(token, secret, {}, async (err, info) => {
+        if (err) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
 
-        const {title,summary,content} = req.body;
+        // Extract post data
+        const { title, summary, content } = req.body;
 
-        const postDoc = PostModel.create(
-            {
+        if (!title || !summary || !content) {
+            return res.status(400).json({ error: 'All fields are required' });
+        }
+
+        try {
+            // Create the post document in the database
+            const postDoc = await PostModel.create({
                 title,
                 summary,
                 content,
-                cover:newPath,
+                cover: newPath,
                 author: info.id
-            }
-        );
-        res.json(postDoc);
-    })
+            });
+
+            // Respond with the newly created post
+            res.json(postDoc);
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ error: 'Error creating post' });
+        }
+    });
+});
+
+
+app.get('/post',async (req,res)=>{
+    res.json(
+        await PostModel.find()
+        .populate('author', ['username'])
+        .sort({createdAt: -1})
+        .limit(20)
+    )
 })
 
+// app.get('post/:id',async (req,res)=>{
+
+//     const id=req.params;
+//     const PostDoc = await Post.findById(id).populate('author', ['username']);
+//     res.json(PostDoc);
+// })
