@@ -28,7 +28,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 const salt = bcrypt.genSaltSync(10);
 const secret = '1234';
 
-mongoose.connect('mongodb+srv://mikasa:1234@blog.xhfki.mongodb.net/')
+mongoose.connect(process.env.MONGODB_URL)
 
 app.listen(5000,()=>{
     console.log("server started")
