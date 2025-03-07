@@ -16,7 +16,7 @@ export default function Header() {
   }, []);
 
   function logout() {
-    fetch("http://localhost:5000/logout", {
+    fetch(`${import.meta.env.VITE_REACT_BACKEND_URL}/logout`, {
       credentials: "include",
       method: "POST",
     });

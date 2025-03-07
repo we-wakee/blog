@@ -20,7 +20,7 @@ export default function CreatePost() {
     }
     ev.preventDefault();
     
-    const response = await fetch('http://localhost:5000/post', {
+    const response = await fetch(`${import.meta.env.VITE_REACT_BACKEND_URL}/post`, {
       method: 'POST', // Fixed method string
       body: data,
       credentials: 'include',

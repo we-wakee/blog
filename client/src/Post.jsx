@@ -12,7 +12,7 @@ export default function Post({ _id, cover, title, author, createdAt, summary, us
       <div className="image mb-6">
         <Link to={`/post/${_id}`}>
           <img
-            src={`http://localhost:5000/${cover}`}
+            src={`${import.meta.env.VITE_REACT_BACKEND_URL}/${cover}`}
             alt="Post Cover"
             className="w-full h-64 object-cover rounded-lg transition-transform duration-500 hover:scale-105"
           />

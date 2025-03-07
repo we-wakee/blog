@@ -1,7 +1,9 @@
 const express = require('express');
 const cors= require('cors');
 const mongoose = require('mongoose')
-const Buffer = require('safe-buffer').Buffer;
+const dotenv = require('dotenv')
+require('dotenv').config()
+const Buffer = require('safe-buffer')
 const bcrypt= require('bcrypt')
 const fs = require('fs');
 const jwt = require('jsonwebtoken');

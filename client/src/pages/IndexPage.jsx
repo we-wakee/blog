@@ -5,7 +5,7 @@ export default function IndexPage() {
   const [posts, setPosts] = useState([]); // Initialize posts as an empty array
   
   useEffect(() => {
-    fetch('http://localhost:5000/post')
+    fetch(`${import.meta.env.VITE_REACT_BACKEND_URL}/post`)
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
