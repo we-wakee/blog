@@ -6,7 +6,7 @@ export default function Header() {
   const { setUserInfo, userInfo } = useContext(UserContext);
 
   useEffect(() => {
-    fetch("http://localhost:5000/profile", {
+    fetch(`${import.meta.env.VITE_REACT_BACKEND_URL}/profile`, {
       method: "GET",
       credentials: "include",
     })
