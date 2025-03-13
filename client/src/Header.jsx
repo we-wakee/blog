@@ -8,20 +8,35 @@ export default function Header() {
   useEffect(() => {
     fetch(`${import.meta.env.VITE_REACT_BACKEND_URL}/profile`, {
       method: "GET",
-      credentials: "include",
+      credentials: "include",  // Ensure cookies are sent
+      // headers: token ? { Authorization: `Bearer ${token}` } : {},
+
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Server Error: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((userInfo) => setUserInfo(userInfo))
-      .catch((error) => console.error("Error fetching user profile:", error));
+      .catch((error) => console.error("Error fetching user profile:", error.message));
   }, []);
+  
 
   function logout() {
     fetch(`${import.meta.env.VITE_REACT_BACKEND_URL}/logout`, {
       credentials: "include",
       method: "POST",
-    });
-    setUserInfo(null);
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to logout');
+        }
+        setUserInfo(null); // Clear user info after logout
+      })
+      .catch((error) => console.error("Error logging out:", error.message));
   }
+  
 
   const username = userInfo?.username;
 

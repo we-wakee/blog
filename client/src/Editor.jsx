@@ -19,6 +19,13 @@ export default function Editor({ value, onChange }) {
     ],
   };
 
+  useEffect(() => {
+    if (quillRef.current) {
+      console.log("Quill editor is ready");
+    }
+  }, []);
+
+
   return (
     <div>
       <ReactQuill
