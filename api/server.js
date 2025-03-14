@@ -73,7 +73,7 @@ app.post('/register',async(req,res)=>{
 
 app.post('/login',async (req,res)=>{
     const{username,password} = req.body;
-    const userDoc= await UserModel.findOne({username});
+    const userDoc= await userModel.findOne({username});
    
 
 
