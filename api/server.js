@@ -16,8 +16,11 @@ const uploadMiddleware = multer({ dest: 'uploads/' });
 
 app.use(express.json()); 
 app.use(cookieParser());
+
+const allowedOrigin = process.env.FRONTEND_URL 
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL, // Allow only your frontend
+    origin: allowedOrigin, // Allow only your frontend
     credentials: true, // Allow credentials (cookies, auth headers)
     methods: "GET,POST,PUT,DELETE,OPTIONS", // Allowed HTTP mecthods
     allowedHeaders: "Content-Type,Authorization", // Allowed headers
