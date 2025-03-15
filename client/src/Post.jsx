@@ -1,12 +1,8 @@
 import { Link } from 'react-router-dom';
 import { formatISO9075 } from 'date-fns';
 
-
-export default function Post({ _id, cover, title, author, createdAt, summary, username ,content }) {
-
-  const cleanContent = content.replace(/<\/?p>/g, '');
-
-
+export default function Post({ _id, cover, title, author, createdAt, summary, username, content }) {
+  
   return (
     <div className="bg-[#212B2D] p-6 rounded-lg shadow-lg w-full max-w-2xl mx-auto transition-all duration-300 hover:scale-105 hover:shadow-2xl">
       <div className="image mb-6">
@@ -27,10 +23,9 @@ export default function Post({ _id, cover, title, author, createdAt, summary, us
           <time className="ml-1 text-gray-400">{formatISO9075(new Date(createdAt))}</time>
         </p>
         <p className="summary text-[#CCCCCC] mt-4 text-lg leading-relaxed">{summary}</p>
-        
-        <div className="content mt-6 text-[#CCCCCC] text-lg leading-relaxed">
-          {cleanContent}
-        </div>
+
+        <div className="content mt-6 text-[#CCCCCC] text-lg leading-relaxed" 
+             dangerouslySetInnerHTML={{ __html: content }} />
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import ReactQuill from "react-quill";
 import { useRef, useEffect } from "react";
+import DOMPurify from "dompurify";
 
 export default function Editor({ value, onChange }) {
   const quillRef = useRef(null);
@@ -25,15 +26,22 @@ export default function Editor({ value, onChange }) {
     }
   }, []);
 
+  const handleEditorChange = (content) => {
+    const sanitizedContent = DOMPurify.sanitize(content, { USE_PROFILES: { html: true } });
+    onChange(sanitizedContent);
+  };
 
   return (
-    <div>
+    <div className="editor-container">
+      <label htmlFor="editor" className="sr-only">Text Editor</label>
       <ReactQuill
-        ref={quillRef} // Attach the ref properly
+        id="editor"
+        ref={quillRef}
         value={value}
         theme="snow"
-        onChange={onChange}
-        className="bg-[#1E2425] text-white border-2 border-white rounded-md min-h-[300px]"
+        onChange={handleEditorChange}
+        placeholder="Write something amazing..."
+        className="bg-[#2A2F32] text-white border border-[#FF4F61] rounded-md min-h-[300px] focus:outline-none"
         modules={modules}
       />
     </div>

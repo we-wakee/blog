@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useContext  } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import { formatISO9075 } from "date-fns";
 import { UserContext } from "../UserContext";
+import DOMPurify from "dompurify";
 
 export default function PostPage() {
   const [postInfo, setPostInfo] = useState(null);
@@ -11,19 +12,29 @@ export default function PostPage() {
   useEffect(() => {
     fetch(`${import.meta.env.VITE_REACT_BACKEND_URL}/post/${id}`)
       .then((response) => response.json())
-      .then((postInfo) => setPostInfo(postInfo));
-  }, []);
+      .then((postInfo) => {
+        // Decode any escaped HTML characters if needed
+        const decodedContent = new DOMParser().parseFromString(
+          postInfo.content,
+          "text/html"
+        ).body.innerHTML;
 
-  if (!postInfo) return (
-    <div className="min-h-screen bg-[#1E2425] text-gray-200 flex justify-center items-center">
-      <p className="text-4xl font-semibold text-[#FF4F61] animate-pulse">Loading...</p>
-    </div>
-  );
-  
+        setPostInfo({ ...postInfo, content: decodedContent });
+      });
+  }, [id]);
+
+  if (!postInfo)
+    return (
+      <div className="min-h-screen bg-[#1E2425] text-gray-200 flex justify-center items-center">
+        <p className="text-4xl font-semibold text-[#FF4F61] animate-pulse">
+          Loading...
+        </p>
+      </div>
+    );
+
   return (
     <div className="min-h-screen bg-[#1E2425] text-gray-200 flex justify-center py-8 px-4">
       <div className="w-full max-w-2xl bg-[#2A2F32] p-6 rounded-lg shadow-lg border border-[#FF4F61]">
-
         {/* Title and Edit Button */}
         <div className="flex justify-between items-center mb-3">
           <h1 className="text-3xl font-bold text-[#FF4F61]">{postInfo.title}</h1>
@@ -40,7 +51,9 @@ export default function PostPage() {
         {/* Meta Info */}
         <div className="text-gray-400 text-sm flex justify-between border-b border-[#FF4F61] pb-3 mb-4">
           <span>{formatISO9075(new Date(postInfo.createdAt))}</span>
-          <span>by <span className="text-[#FF4F61]">@{postInfo.author.username}</span></span>
+          <span>
+            by <span className="text-[#FF4F61]">@{postInfo.author.username}</span>
+          </span>
         </div>
 
         {/* Cover Image */}
@@ -54,10 +67,12 @@ export default function PostPage() {
           </div>
         )}
 
-        {/* Content */}
+        {/* Content with HTML Rendering */}
         <div
           className="text-gray-300 text-base leading-6 space-y-3 max-h-[400px] overflow-y-auto pr-3"
-          dangerouslySetInnerHTML={{ __html: postInfo.content }}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(postInfo.content),
+          }}
         />
       </div>
     </div>

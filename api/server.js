@@ -36,7 +36,7 @@ then(() => console.log("Connected to MongoDB"))
 .catch((error) => console.error("MongoDB connection error:", error))
 
 
-app.listen(process.env.PORT,()=>{
+app.listen(process.env. ,()=>{
     console.log("server started")
 }); 
 
